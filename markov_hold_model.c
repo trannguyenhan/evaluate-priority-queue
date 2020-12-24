@@ -55,8 +55,8 @@ int main(int argc, char** argv){
     //initqueue();
     getRandomNumber();
     getRandomVariate();
-    FILE *f = fopen("result/markov_hold_model/result.txt","a");
-    /*end init priority queue*/
+    FILE *f = fopen("result/markov_hold_model/result.txt", "a");
+    /*end*/
 
     /*init variable*/
     double wc1 = 0, wc2 = 0, cpuT = 0;
@@ -74,7 +74,7 @@ int main(int argc, char** argv){
     unsigned long arr[20250][7];//20250 = 3*(k*k*k/4) as k = 30
     int root = -1;
 
-    long count = 0, n = 1;
+    long count = 0, n = 100;
     long index = 0;
     double current = 0;
     setlocale(LC_NUMERIC, "");
@@ -83,25 +83,31 @@ int main(int argc, char** argv){
     printf("Free memory Available = %'ld\n", mem / (1024*1024));
     printf("Start......\n");
 
+    /*variable for state markov hold model*/
     int state = 0; // delete
     int done = 0; // run program
     int variateIndex = 0;
     double anpha = 0.5;
     double beta = 0.5;
+    /*end*/
 
     /*START*/
     timing(&wc1, &cpuT);
 
     // begin insert 1000 event
     for(int i=0; i<10000; i++){
+        enqueue(A, i, 0, 0, &root, arr);
+
         //enqueue(new_node(A,0,0,0));
-        enqueue(A, 0, 0, 0, &root, arr);
     }
+
+    unsigned long del;
+    dequeue(&first, &root, arr); del = arr[first][3]; current = del;
+
     //node* del = dequeue(); current = del->endTime;
-    dequeue(&first, &root, arr); current = first;
     while(!done){
         if(state == 0){
-            if(/*qsize == 0*/root == -1){ // calendar queue is empty
+            if(/*qsize == 0*/first == -1){ // queue is empty
                 printf("error!");
                 return 0;
             }
@@ -110,15 +116,18 @@ int main(int argc, char** argv){
             variateIndex++; if(variateIndex == 1000000) variateIndex = 0;
 
             if(randomU < anpha){
+                dequeue(&first, &root, arr); del = arr[first][3]; current = del;
+
                 //del = dequeue(); current = del->endTime;
-                dequeue(&first, &root, arr); current = first;
                 state = 0;
                 count++;
             } else {
-                enqueue(A, 0, 0, current + number[index], &root, arr);
+                int i = arr[first][1];
+                enqueue(A, i, 0, current + number[index], &root, arr);
+
                 //node* new_n = new_node(A, 0, 0, current + number[index]);
-                index++; if(index == 1000000) index = 0;
                 //enqueue(new_n);
+                index++; if(index == 1000000) index = 0;
                 state = 1;
                 count++;
             }
@@ -127,15 +136,18 @@ int main(int argc, char** argv){
             variateIndex++; if(variateIndex == 1000000) variateIndex = 0;
 
             if(randomU < 1 - beta){
+                dequeue(&first, &root, arr); del = arr[first][3]; current = del;
+
                 //del = dequeue(); current = del->endTime;
-                dequeue(&first, &root, arr); current = first;
                 state = 0;
                 count++;
             } else {
-                enqueue(A, 0, 0, current + number[index], &root, arr);
+                int i = arr[first][1];
+                enqueue(A, i, 0, current + number[index], &root, arr);
+
                 //node* new_n = new_node(A, 0, 0, current + number[index]);
-                index++; if(index == 1000000) index = 0;
                 //enqueue(new_n);
+                index++; if(index == 1000000) index = 0;
                 state = 1;
                 count++;
             }
