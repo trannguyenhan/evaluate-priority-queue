@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include "timing.c"
-#include "OptimizationSplay.c"
+#include "VoidSplay.c"
 #include <locale.h>
 #include <math.h>
 
@@ -52,7 +52,16 @@ void printFlie(FILE *f, double wc1, double wc2, long count, ProcStatm proc_statm
 /*MAIN*/
 int main(int argc, char** argv){
     /*init priority queue*/
+    // khoi tao calendar queue
     //initqueue();
+
+    // khoi tao array splay
+    //int root = -1, first = -1;
+    //unsigned long arr[MARCO][7];//20250 = 3*(k*k*k/4) as k = 30
+
+    // khoi tao void splay
+    splay_tree *t = new_splay_tree();
+
     getRandomNumber();
     getRandomVariate();
     FILE *f = fopen("result/markov_hold_model/result.txt", "a");
@@ -70,13 +79,9 @@ int main(int argc, char** argv){
             defaultBias = atoi(argv[2]);
     }
 
-    int first = -1;
-    unsigned long arr[20250][7];//20250 = 3*(k*k*k/4) as k = 30
-    int root = -1;
-
-    long count = 0, n = 100;
+    long count = 0, n = 1000000;
     long index = 0;
-    double current = 0;
+    int current = 0;
     setlocale(LC_NUMERIC, "");
 
     unsigned long mem = mem_avail();
@@ -96,18 +101,22 @@ int main(int argc, char** argv){
 
     // begin insert 1000 event
     for(int i=0; i<10000; i++){
-        enqueue(A, i, 0, 0, &root, arr);
+        enqueue(t, new_node(A, i, 0L, 0));
+
+        //enqueue(A, i, 0, 0, &root, arr);
 
         //enqueue(new_node(A,0,0,0));
     }
 
-    unsigned long del;
-    dequeue(&first, &root, arr); del = arr[first][3]; current = del;
+    node * del = dequeue(t); current = del->endTime; //printf("%d \n",  current);
+
+    //unsigned long del;
+    //dequeue(&first, &root, arr); del = arr[first][3]; current = del;
 
     //node* del = dequeue(); current = del->endTime;
     while(!done){
         if(state == 0){
-            if(/*qsize == 0*/first == -1){ // queue is empty
+            if(/*qsize == 0*//*first == -1*/t == NULL){ // queue is empty
                 printf("error!");
                 return 0;
             }
@@ -116,14 +125,19 @@ int main(int argc, char** argv){
             variateIndex++; if(variateIndex == 1000000) variateIndex = 0;
 
             if(randomU < anpha){
-                dequeue(&first, &root, arr); del = arr[first][3]; current = del;
+                del = dequeue(t); current = del->endTime; //printf("%d \n",  current);
+
+                //dequeue(&first, &root, arr); del = arr[first][3]; current = del;
 
                 //del = dequeue(); current = del->endTime;
                 state = 0;
                 count++;
             } else {
-                int i = arr[first][1];
-                enqueue(A, i, 0, current + number[index], &root, arr);
+                int i = del->idElementInGroup;
+                enqueue(t, new_node(A, i, 0L, current + number[index]));
+
+                //int i = arr[first][1];
+                //enqueue(A, i, 0, current + number[index], &root, arr);
 
                 //node* new_n = new_node(A, 0, 0, current + number[index]);
                 //enqueue(new_n);
@@ -136,14 +150,19 @@ int main(int argc, char** argv){
             variateIndex++; if(variateIndex == 1000000) variateIndex = 0;
 
             if(randomU < 1 - beta){
-                dequeue(&first, &root, arr); del = arr[first][3]; current = del;
+                del = dequeue(t); current = del->endTime; //printf("%d \n",  current);
+
+                //dequeue(&first, &root, arr); del = arr[first][3]; current = del;
 
                 //del = dequeue(); current = del->endTime;
                 state = 0;
                 count++;
             } else {
-                int i = arr[first][1];
-                enqueue(A, i, 0, current + number[index], &root, arr);
+                int i = del->idElementInGroup;
+                enqueue(t, new_node(A, i, 0L, current + number[index]));
+
+                //int i = arr[first][1];
+                //enqueue(A, i, 0, current + number[index], &root, arr);
 
                 //node* new_n = new_node(A, 0, 0, current + number[index]);
                 //enqueue(new_n);
@@ -153,7 +172,9 @@ int main(int argc, char** argv){
             }
         }
 
-        if(count == n) done = 1;
+        if(count == n){
+            done = 1;
+        }
     }
 
 

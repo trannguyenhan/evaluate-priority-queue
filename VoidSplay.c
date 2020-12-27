@@ -173,7 +173,7 @@ void splay(splay_tree *t, node *n) {
 
 }
 
-void insert(splay_tree *t, node *n) {
+void enqueue(splay_tree *t, node *n) {
   //sizeTree++;
   //if(maxSize < sizeTree) maxSize = sizeTree;
 
@@ -256,7 +256,7 @@ void delete_key(splay_tree *t, int key)
   delete(t, temp);
 }
 
-node* removeFirst(splay_tree *t)
+node* dequeue(splay_tree *t)
 {
     //sizeTree--;
     node *x = minimum(t);

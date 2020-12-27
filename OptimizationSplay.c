@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Event.c"
-
+#define MARCO 48000
 //int sizeOfTree = 0;
 //int maxSize = 0;
 
@@ -10,7 +10,7 @@ void enqueue(int type, int idElementInGroup,
                 int portID,
                 unsigned long endTime,
                 int *root,
-                unsigned long arr[20250][7]
+                unsigned long arr[MARCO][7]
                 );
 /* From now on, an event has 7 fields about:
    + it's type
@@ -22,22 +22,22 @@ void enqueue(int type, int idElementInGroup,
    + index of right
 */
 
-void splay(int e, unsigned long arr[20250][7]
+void splay(int e, unsigned long arr[MARCO][7]
                   );
 
-void dequeue(int * first, int * root, unsigned long arr[20250][7]
+void dequeue(int * first, int * root, unsigned long arr[MARCO][7]
                   );
 
-void show(unsigned long arr[20250][7],
+void show(unsigned long arr[MARCO][7],
                int root);
-void leaf(unsigned long arr[20250][7],
+void leaf(unsigned long arr[MARCO][7],
                int root, enum Side side);
 
 void enqueue(int type, int idElementInGroup,
                 int portID,
                 unsigned long endTime,
                 int *root,
-                unsigned long arr[20250][7]
+                unsigned long arr[MARCO][7]
                 )
 {
    //sizeOfTree++;
@@ -181,7 +181,7 @@ void enqueue(int type, int idElementInGroup,
 
 }
 
-void splay(int e, unsigned long arr[20250][7]
+void splay(int e, unsigned long arr[MARCO][7]
                )
 {
    int left;
@@ -193,6 +193,7 @@ void splay(int e, unsigned long arr[20250][7]
       f = arr[e][4];  //  f = e->father;
       gf = arr[f][4]; //  gf = f->father;
       left = (e == arr[f][5] ? 1 : 0);  //left = (e == f->left ? 1 : 0);
+      #pragma region if(left)
       if(left)
       {
          // cas du fils gauche
@@ -242,6 +243,7 @@ void splay(int e, unsigned long arr[20250][7]
                   arr[ggf][6] = e; //ggf->right = e;
          }
       }
+      #pragma endregion
       else
       {
          //cas du fils droit
@@ -376,7 +378,7 @@ void dequeue(int * first, int * root, unsigned long arr[20250][7]
 
 }
 
-void show(unsigned long arr[20250][7],
+void show(unsigned long arr[MARCO][7],
             int root)
 {
    if(root != -1 && arr[root][3] != -1)
@@ -393,7 +395,7 @@ void show(unsigned long arr[20250][7],
    }
 }
 
-void leaf(unsigned long arr[20250][7],
+void leaf(unsigned long arr[MARCO][7],
             int root, enum Side side)
 {
    printf("===========> ");
@@ -418,7 +420,7 @@ void leaf(unsigned long arr[20250][7],
    }
 }
 
-void validate(unsigned long arr[20250][7],
+void validate(unsigned long arr[MARCO][7],
                int index)
 {
    //return;
