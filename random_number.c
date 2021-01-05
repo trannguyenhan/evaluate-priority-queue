@@ -21,7 +21,7 @@ double exponential(){
 
 // uniform real number distribution between 0 and x
 double uniform(double x){
-    return 2 * randomDouble();
+    return x * randomDouble();
 }
 
 // biased real number distribution between x and y
@@ -46,37 +46,37 @@ int main(){
     srand(time(NULL));
     f = fopen("resource/random_number/triangular.txt", "w");
     for(int i=0; i<1000000; i++){
-        double r = triangular(1.5);
-        printf("%lf\n", r);
-        fprintf(f, "%lf\n", r);
+        int r = (int) triangular(10.0);
+        printf("%d\n", r);
+        fprintf(f, "%d\n", r);
     }
 
     f = fopen("resource/random_number/bimodal.txt", "w");
     for(int i=0; i<1000000; i++){
-        double r = bimodal();
-        printf("%lf\n", r);
-        fprintf(f, "%lf\n", r);
+        int r = (int) bimodal();
+        printf("%d\n", r);
+        fprintf(f, "%d\n", r);
     }
 
     f = fopen("resource/random_number/uniform.txt", "w");
     for(int i=0; i<1000000; i++){
-        double r = uniform(2.0);
-        printf("%lf\n", r);
-        fprintf(f, "%lf\n", r);
+        int r = (int) uniform(10.0);
+        printf("%d\n", r);
+        fprintf(f, "%d\n", r);
     }
 
     f = fopen("resource/random_number/exponential.txt", "w");
     for(int i=0; i<1000000; i++){
-        double r = exponential();
-        printf("%lf\n", r);
-        fprintf(f, "%lf\n", r);
+        int r = (int) exponential();
+        printf("%d\n", r);
+        fprintf(f, "%d\n", r);
     }
 
     f = fopen("resource/random_number/biased.txt", "w");
     for(int i=0; i<1000000; i++){
-        double r = biased(0.9, 1.1);
-        printf("%lf\n", r);
-        fprintf(f, "%lf\n", r);
+        int r = (int) biased(0, 10.0);
+        printf("%d\n", r);
+        fprintf(f, "%d\n", r);
     }
 
     f = fopen("resource/random_variate/variate.txt", "w");

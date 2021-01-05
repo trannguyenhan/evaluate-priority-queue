@@ -7,7 +7,7 @@
 
 double number[1000000];
 void getRandomNumber(){
-    FILE *fp = fopen("resource/random_number/uniform.txt", "r");
+    FILE *fp = fopen("resource/random_number/biased.txt", "r");
     int index = 0;
     double buff;
     while (!feof (fp)) {
@@ -79,7 +79,7 @@ int main(int argc, char** argv){
             defaultBias = atoi(argv[2]);
     }
 
-    long count = 0, n = 1000000;
+    long count = 0, n = 10000000;
     long index = 0;
     int current = 0;
     setlocale(LC_NUMERIC, "");
